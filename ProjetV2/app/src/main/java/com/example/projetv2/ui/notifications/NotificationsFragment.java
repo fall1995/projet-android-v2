@@ -1,4 +1,4 @@
-package com.example.projetv2.ui.notifications;
+package com.example.projetv2.ui.favoris;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

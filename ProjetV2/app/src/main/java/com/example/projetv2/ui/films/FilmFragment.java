@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
+import java.io.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,6 +20,8 @@ import com.example.projetv2.R;
 import com.example.projetv2.RecyclerViewAdapter;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import modele.Movie;
 import modele.MovieCollection;
@@ -33,20 +35,32 @@ public class FilmFragment extends Fragment {
 
     private RecyclerView recyclerNowPlaying;
     private RecyclerView recyclerPopular;
+    public static List<Movie> listMovie; //liste avec tous les films de toutes les categories
     public List<Movie> movieNowPlaying;
     public  List<Movie> moviePopular;
     public static final String key = "1abe855bc465dce9287da07b08a664eb";
     public static final String NOM_FILM = "nomFilm";
-
-
-
     private FilmViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        fetchTmdbData();
 
+
+                fetchTmdbData();
+
+
+       /* Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+    listMovie = movieNowPlaying;
+  //  ajouterList(moviePopular);
+    listMovie.addAll(moviePopular);
+                  // Log.i("log", "taille"+listMovie.size()  );
+            }
+        },3000);*/
 
 
 
@@ -92,9 +106,10 @@ public class FilmFragment extends Fragment {
         tmdbService.getMoviesNowPlaying(key).enqueue(new Callback<MovieCollection>() {
             @Override
             public void onResponse(Call<MovieCollection> call, Response<MovieCollection> response) {
-                Log.i("log", "gjfgjhf,fhfffh,,fhf,h"  );
+
                 movieNowPlaying =response.body().getMovieList();
-                //   Log.i("log", movieNowPlaying.get(0).getTitle()   );
+              //  Log.i("log", "taille"+movieNowPlaying.size()  );
+                 // Log.i("log", movieNowPlaying.get(0).getTitle()   );
 
                 startRecyclerNowPlaying();
             }
@@ -103,14 +118,20 @@ public class FilmFragment extends Fragment {
             public void onFailure(Call<modele.MovieCollection> call, Throwable t) {
                 Log.i("test","marche paaaaas");
             }
+
         });
+
+
 
         tmdbService.getMoviesPopular(key).enqueue(new Callback<MovieCollection>() {
             @Override
             public void onResponse(Call<MovieCollection> call, Response<MovieCollection> response) {
-                Log.i("log4", "rattatata"  );
+             //   Log.i("log4", "rattatata"  );
                 moviePopular =response.body().getMovieList();
-                //   Log.i("log", movieNowPlaying.get(0).getTitle()   );
+               // Log.i("log45", "taille"+moviePopular.size()  );
+                //ajouterList(moviePopular);
+
+
 
                startRecyclerPopular();
             }
@@ -127,6 +148,7 @@ public class FilmFragment extends Fragment {
 
     private void startRecyclerNowPlaying(){
         final RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(movieNowPlaying, new RecyclerViewAdapter.OnItemClickListener() {
+
             @Override
             public void onItemClick(View view, int position) {
 
@@ -179,6 +201,23 @@ public class FilmFragment extends Fragment {
                 Log.i("click","je viens de cliquer sur ..");
             }
         });
+    }
+
+    public void ajouterList (List<Movie> movieList){
+        int c =0;
+       // Log.i("log46", "taille"+listMovie.size()  );
+            for(int i=0; i<movieList.size();i++){
+                for (int j=0; j<listMovie.size();j++){
+                    if(movieList.get(i).getTitle() == listMovie.get(j).getTitle()){
+                      c ++;
+                    }
+                    if(c ==0){
+                        listMovie.add(movieList.get(i));
+                    }
+                    c =0;
+                }
+            }
+
     }
 
     public List<Movie> getMovieNowPlaying() {

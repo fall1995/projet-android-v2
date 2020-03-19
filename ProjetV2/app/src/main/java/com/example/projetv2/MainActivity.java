@@ -53,97 +53,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void fetchTmdbData(){
-        TmdbService tmdbService = RetrofitClientInstance.getlnstance().create(TmdbService.class);
-
-        tmdbService.getMoviesNowPlaying(key).enqueue(new Callback<MovieCollection>() {
-            @Override
-            public void onResponse(Call<MovieCollection> call, Response<MovieCollection> response) {
-                Log.i("log", "gjfgjhf,fhfffh,,fhf,h"  );
-                movieNowPlaying =response.body().getMovieList();
-                //   Log.i("log", movieNowPlaying.get(0).getTitle()   );
-
-                startRecyclerNowPlaying();
-            }
-
-            @Override
-            public void onFailure(Call<modele.MovieCollection> call, Throwable t) {
-                Log.i("test","marche paaaaas");
-            }
-        });
-
-        tmdbService.getMoviesPopular(key).enqueue(new Callback<MovieCollection>() {
-            @Override
-            public void onResponse(Call<MovieCollection> call, Response<MovieCollection> response) {
-                Log.i("log4", "rattatata"  );
-                moviePopular =response.body().getMovieList();
-                //   Log.i("log", movieNowPlaying.get(0).getTitle()   );
-
-                startRecyclerPopular();
-            }
-
-            @Override
-            public void onFailure(Call<modele.MovieCollection> call, Throwable t) {
-                Log.i("test2","nooopeeee");
-            }
-        });
 
 
-    }
 
 
-    private void startRecyclerNowPlaying(){
-        final RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(movieNowPlaying, new RecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(getApplicationContext(),"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
-                Intent movieClickActivity = new Intent(getApplicationContext(), MovieDetails.class);
 
-                Bundle b = new Bundle();
-                Movie movie = (Movie) movieNowPlaying.get(position);
-                String nomSelect = movie.getTitle();
-                b.putString(NOM_FILM, nomSelect);
-                b.putInt("pos",position);
-                movieClickActivity.putExtras(b); //Put your id to your next Intent
-                startActivity(movieClickActivity);
-                //finish();
-            }
-        });
-        recyclerNowPlaying.setAdapter(recyclerViewAdapter);
-
-        recyclerNowPlaying.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("click","je viens de cliquer sur ..");
-            }
-        });
-    }
-
-    private void startRecyclerPopular(){
-        final RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(moviePopular, new RecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(getApplicationContext()," en position " + position, Toast.LENGTH_LONG).show();
-                Intent movieClickActivity = new Intent(getApplicationContext(), MovieDetails.class);
-
-                Bundle b = new Bundle();
-                Movie movie = (Movie) moviePopular.get(position);
-                //  String nomSelect = movie.getTitle();
-                //  b.putString(NOM_FILM, nomSelect);
-                //  b.putInt("pos",position);
-                //   movieClickActivity.putExtras(b); //Put your id to your next Intent
-                startActivity(movieClickActivity);
-                //finish();
-            }
-        });
-        recyclerPopular.setAdapter(recyclerViewAdapter);
-
-        recyclerPopular.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("click","je viens de cliquer sur ..");
-            }
-        });
-    }
 
 }

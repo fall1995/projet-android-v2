@@ -40,9 +40,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolderMovie>
 
     @Override
     public int getItemCount() {
+        if(this.MovieList == null){
+            return 0;
+        }
         return this.MovieList.size();
     }
 
+
+
+    public void deleteMovie(int index,List<Movie> movieList ){
+        this.MovieList = movieList;
+        this.MovieList.remove(index);
+        notifyDataSetChanged();
+    }
+    public void notifyAdapter(){
+        notifyDataSetChanged();
+    }
 
     public interface OnItemClickListener{
         void onItemClick(View view, int position);

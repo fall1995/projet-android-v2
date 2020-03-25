@@ -6,22 +6,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
-import java.io.*;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.projetv2.MovieDetails;
+import com.example.projetv2.MovieNowPlayingDetails;
 import com.example.projetv2.MoviePopularDetails;
 import com.example.projetv2.R;
 import com.example.projetv2.RecyclerViewAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import modele.Movie;
 import modele.MovieCollection;
@@ -33,14 +32,16 @@ import service.TmdbService;
 
 public class FilmFragment extends Fragment {
 
-    private RecyclerView recyclerNowPlaying;
-    private RecyclerView recyclerPopular;
+    public static RecyclerView recyclerNowPlaying;
+    public static RecyclerView recyclerPopular;
     public static List<Movie> listMovie; //liste avec tous les films de toutes les categories
-    public List<Movie> movieNowPlaying;
-    public  List<Movie> moviePopular;
+    public static List<Movie> movieNowPlaying;
+    public  static List<Movie> moviePopular;
+    public static List<Movie> listFavoris = new ArrayList<>();
     public static final String key = "1abe855bc465dce9287da07b08a664eb";
     public static final String NOM_FILM = "nomFilm";
     private FilmViewModel homeViewModel;
+    public Button button ;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -65,14 +66,14 @@ public class FilmFragment extends Fragment {
 
 
 
-        homeViewModel =
-                ViewModelProviders.of(this).get(FilmViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+       // homeViewModel =
+             //   ViewModelProviders.of(this).get(FilmViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_films, container, false);
 
 
 
         recyclerNowPlaying = root.findViewById(R.id.recycler);
-        //  recyclerView.setHasFixedSize(true);
+        //  recyclerFavoris.setHasFixedSize(true);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerNowPlaying.setLayoutManager(horizontalLayoutManager);
 
@@ -80,6 +81,7 @@ public class FilmFragment extends Fragment {
         //recyclerPopular.setHasFixedSize(true);
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerPopular.setLayoutManager(horizontalLayoutManager2);
+
 
 
 
@@ -154,7 +156,7 @@ public class FilmFragment extends Fragment {
 
 
                 Toast.makeText(getActivity(),"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
-                Intent movieClickActivity = new Intent(getActivity(), MovieDetails.class);
+                Intent movieClickActivity = new Intent(getActivity(), MovieNowPlayingDetails.class);
 
                 Bundle b = new Bundle();
                 Movie movie = (Movie) movieNowPlaying.get(position);
@@ -167,6 +169,7 @@ public class FilmFragment extends Fragment {
             }
         });
         recyclerNowPlaying.setAdapter(recyclerViewAdapter);
+        recyclerNowPlaying.setTag(recyclerViewAdapter);
 
         recyclerNowPlaying.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,6 +223,9 @@ public class FilmFragment extends Fragment {
 
     }
 
+    public void addFavoris (View v){
+        Log.i("log21","ajouter au favoris");
+    }
     public List<Movie> getMovieNowPlaying() {
         return movieNowPlaying;
     }

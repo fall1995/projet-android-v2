@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projetv2.ui.films.FilmFragment;
+
 import java.util.ArrayList;
 
 import modele.Movie;
@@ -19,7 +21,7 @@ import service.TmdbService;
 import static com.example.projetv2.MainActivity.key;
 import static com.example.projetv2.MainActivity.NOM_FILM;
 
-public class MovieDetails extends AppCompatActivity {
+public class MovieNowPlayingDetails extends AppCompatActivity {
     private Movie selectedMovie;
     private TextView movieTitle;
     private TextView movieRealisateur;
@@ -57,7 +59,11 @@ public class MovieDetails extends AppCompatActivity {
             Log.i("heazazaazzayyyy", nomfilm);
         }
 
-        TmdbService tmdbService = RetrofitClientInstance.getlnstance().create(TmdbService.class);
+
+        selectedMovie = FilmFragment.movieNowPlaying.get(pos);
+        Log.i("skulurt", selectedMovie.getTitle());
+        setDetails();
+      /*  TmdbService tmdbService = RetrofitClientInstance.getlnstance().create(TmdbService.class);
         tmdbService.getMoviesNowPlaying(key).enqueue(new Callback<MovieCollection>() {
             @Override
             public void onResponse(Call<MovieCollection> call, Response<MovieCollection> response) {
@@ -71,7 +77,7 @@ public class MovieDetails extends AppCompatActivity {
 
 
             }
-        });
+        });*/
     }
     private void setDetails(){
         movieTitle=findViewById(R.id.title);

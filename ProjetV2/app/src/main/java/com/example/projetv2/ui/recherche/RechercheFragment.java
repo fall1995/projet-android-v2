@@ -10,25 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.projetv2.MovieDetails;
+import com.example.projetv2.MovieSearch;
 import com.example.projetv2.R;
 import com.example.projetv2.RecyclerViewAdapter;
 import com.example.projetv2.ui.films.FilmFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import modele.Movie;
@@ -39,13 +33,13 @@ import retrofit2.Response;
 import service.RetrofitClientInstance;
 import service.TmdbService;
 
-public class DashboardFragment extends Fragment {
+public class RechercheFragment extends Fragment {
 
     public ArrayAdapter<String> adapter;
     private DashboardViewModel dashboardViewModel;
     public EditText editText;
     //public ListView listView;
-    public List<Movie> listMovie;
+    public static List<Movie> listMovie;
     public List<Movie> listFixe;
     public String[] items;
     public ArrayList<String> listItems;
@@ -58,9 +52,9 @@ public class DashboardFragment extends Fragment {
 
         fetchTmdbData("S");
 
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+       // dashboardViewModel =
+               // ViewModelProviders.of(this).get(DashboardViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_recherche, container, false);
 
        /* listFixe = new ArrayList<Movie>();
         listFixe.addAll(FilmFragment.listMovie);
@@ -128,7 +122,7 @@ public class DashboardFragment extends Fragment {
 
                 listMovie = response.body().getMovieList();
                   Log.i("log990", "taille "+listMovie.size()  );
-                // Log.i("log", movieNowPlaying.get(0).getTitle()   );
+//                Log.i("log", listMovie.get(0).getTitle()   );
               //  recyclerViewAdapter.notifyAdapter();
                 startRecyclerSearch();
             }
@@ -175,10 +169,8 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
 
-
                 Toast.makeText(getActivity(),"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
-                Intent movieClickActivity = new Intent(getActivity(), MovieDetails.class);
-
+                Intent movieClickActivity = new Intent(getActivity(), MovieSearch.class);
                 Bundle b = new Bundle();
                 Movie movie = (Movie) listMovie.get(position);
                 String nomSelect = movie.getTitle();

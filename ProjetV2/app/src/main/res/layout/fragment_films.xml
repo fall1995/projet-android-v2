@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/dark">
 
 
     <ScrollView
@@ -15,18 +16,53 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:text="A l'affiche"
+                android:textColor="@color/white"
+                android:textSize="30dp"
+                android:textStyle="bold"
+
+
+                />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
                 android:layout_width="wrap_content"
                 android:layout_height="400dp"
-                android:orientation="vertical" />
+                android:orientation="vertical" >
 
+
+
+            </androidx.recyclerview.widget.RecyclerView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#4a4a4a"/>
+
+
+
+            <TextView
+                android:layout_marginTop="10dp"
+
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:text="Populaire"
+                android:textColor="@color/white"
+                android:textSize="30dp"
+                android:textStyle="bold"
+
+
+                />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler2"
                 android:layout_width="wrap_content"
-                android:layout_height="400dp"
+                android:layout_height="450dp"
                 android:layout_below="@id/recycler"
                 android:orientation="vertical" />
+
         </LinearLayout>
     </ScrollView>
 

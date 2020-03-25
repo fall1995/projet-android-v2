@@ -6,13 +6,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.projetv2.ui.films.FilmFragment;
+import com.example.projetv2.ui.recherche.RechercheFragment;
 
 import modele.Movie;
 
 import static com.example.projetv2.MainActivity.NOM_FILM;
 
-public class MoviePopularDetails extends AppCompatActivity {
+public class MovieSearch extends AppCompatActivity {
     private Movie selectedMovie;
     private TextView movieTitle;
     private TextView movieRealisateur;
@@ -47,15 +47,14 @@ public class MoviePopularDetails extends AppCompatActivity {
         if(b != null){
             nomfilm= b.getString(NOM_FILM);
             pos = b.getInt("pos");
-            Log.i("heazazaazzayyyy", nomfilm);
+          //  Log.i("heazazaazzayyyy", nomfilm);
         }
 
 
-
-        selectedMovie = FilmFragment.moviePopular.get(pos);
+        selectedMovie = RechercheFragment.listMovie.get(pos);
         Log.i("skulurt", selectedMovie.getTitle());
         setDetails();
-      /*  TmdbService tmdbService = RetrofitClientInstance.getlnstance().create(TmdbService.class);
+     /* TmdbService tmdbService = RetrofitClientInstance.getlnstance().create(TmdbService.class);
         tmdbService.getMoviesPopular(key).enqueue(new Callback<MovieCollection>() {
             @Override
             public void onResponse(Call<MovieCollection> call, Response<MovieCollection> response) {

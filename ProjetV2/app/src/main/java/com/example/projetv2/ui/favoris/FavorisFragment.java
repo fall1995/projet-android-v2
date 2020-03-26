@@ -74,7 +74,7 @@ public class FavorisFragment extends Fragment {
                 startActivity(movieClickActivity);
 
             }
-        });
+        },0);
         recyclerFavoris.setAdapter(recyclerViewAdapter);
 
         recyclerFavoris.setOnClickListener(new View.OnClickListener() {

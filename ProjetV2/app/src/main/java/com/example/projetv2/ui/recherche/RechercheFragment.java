@@ -50,7 +50,7 @@ public class RechercheFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        fetchTmdbData("S");
+       // fetchTmdbData("S");
 
        // dashboardViewModel =
                // ViewModelProviders.of(this).get(DashboardViewModel.class);
@@ -64,7 +64,7 @@ public class RechercheFragment extends Fragment {
        // listView =  root.findViewById(R.id.listview);
         editText = root.findViewById(R.id.txtsearch);
 
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
       //  initList();
 
@@ -82,7 +82,8 @@ public class RechercheFragment extends Fragment {
                 if(s.toString().equals("")){
                     Log.i("log77", " fck 12"  );
                     // reset listview
-
+                    listMovie.clear();
+                    recyclerViewAdapter.notifyAdapter();
 
                    // initList();
                 } else{
@@ -90,7 +91,7 @@ public class RechercheFragment extends Fragment {
 
                    // recyclerViewAdapter.notifyDataSetChanged();
                     fetchTmdbData(s.toString());
-                     recyclerViewAdapter.notifyDataSetChanged();
+                     //recyclerViewAdapter.notifyDataSetChanged();
                 //    searchItem(s.toString());
 
                 }
@@ -180,7 +181,7 @@ public class RechercheFragment extends Fragment {
                 startActivity(movieClickActivity);
 
             }
-        });
+        },1);
         recyclerView.setAdapter(recyclerViewAdapter);
 
         recyclerView.setOnClickListener(new View.OnClickListener() {

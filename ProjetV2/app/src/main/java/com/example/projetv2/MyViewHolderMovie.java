@@ -30,7 +30,7 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
     private LikeButton button;
     private List<Movie> list;
 
-    public MyViewHolderMovie(View itemView, List<Movie> list) {
+    public MyViewHolderMovie(View itemView, List<Movie> list,int n) {
         super(itemView);
         this.list = list;
         this.newItemView = itemView;

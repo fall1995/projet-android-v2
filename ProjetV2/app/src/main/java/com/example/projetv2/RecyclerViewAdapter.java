@@ -15,8 +15,9 @@ import modele.Movie;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolderMovie>  {
     private List<Movie> MovieList;
     private OnItemClickListener listener;
+    private int n;
 
-    public RecyclerViewAdapter(List<Movie> movieList, OnItemClickListener listener) {
+    public RecyclerViewAdapter(List<Movie> movieList, OnItemClickListener listener,int n) {
         MovieList = movieList;
         this.listener = listener;
     }
@@ -25,7 +26,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolderMovie>
     @Override
     public MyViewHolderMovie onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
-        return new MyViewHolderMovie(view,MovieList);
+        return new MyViewHolderMovie(view,MovieList,n);
     }
 
     @Override

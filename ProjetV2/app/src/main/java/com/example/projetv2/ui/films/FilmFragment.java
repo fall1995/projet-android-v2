@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -71,7 +72,6 @@ public class FilmFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_films, container, false);
 
 
-
         recyclerNowPlaying = root.findViewById(R.id.recycler);
         //  recyclerFavoris.setHasFixedSize(true);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -81,7 +81,6 @@ public class FilmFragment extends Fragment {
         //recyclerPopular.setHasFixedSize(true);
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerPopular.setLayoutManager(horizontalLayoutManager2);
-
 
 
 
@@ -167,7 +166,7 @@ public class FilmFragment extends Fragment {
                 startActivity(movieClickActivity);
 
             }
-        });
+        },0);
         recyclerNowPlaying.setAdapter(recyclerViewAdapter);
         recyclerNowPlaying.setTag(recyclerViewAdapter);
 
@@ -195,7 +194,7 @@ public class FilmFragment extends Fragment {
                 startActivity(movieClickActivity);
                 //finish();
             }
-        });
+        },0);
         recyclerPopular.setAdapter(recyclerViewAdapter);
 
         recyclerPopular.setOnClickListener(new View.OnClickListener() {

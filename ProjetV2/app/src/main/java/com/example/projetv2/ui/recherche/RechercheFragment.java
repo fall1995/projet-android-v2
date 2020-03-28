@@ -1,5 +1,6 @@
 package com.example.projetv2.ui.recherche;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,7 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.projetv2.MovieSearch;
+import com.example.projetv2.MovieDetails;
 import com.example.projetv2.R;
 import com.example.projetv2.RecyclerViewAdapter;
 import com.example.projetv2.ui.films.FilmFragment;
@@ -36,7 +38,7 @@ import service.TmdbService;
 public class RechercheFragment extends Fragment {
 
     public ArrayAdapter<String> adapter;
-    private DashboardViewModel dashboardViewModel;
+
     public EditText editText;
     //public ListView listView;
     public static List<Movie> listMovie;
@@ -45,6 +47,7 @@ public class RechercheFragment extends Fragment {
     public ArrayList<String> listItems;
     private RecyclerView recyclerView;
     public RecyclerViewAdapter recyclerViewAdapter;
+    public static final String SEARCH = "search";
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -63,6 +66,8 @@ public class RechercheFragment extends Fragment {
         recyclerView = root.findViewById(R.id.recycler_search);
        // listView =  root.findViewById(R.id.listview);
         editText = root.findViewById(R.id.txtsearch);
+        View.OnFocusChangeListener ofcListener = new MyFocusChangeListener();
+        editText.setOnFocusChangeListener(ofcListener);
 
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
@@ -82,7 +87,10 @@ public class RechercheFragment extends Fragment {
                 if(s.toString().equals("")){
                     Log.i("log77", " fck 12"  );
                     // reset listview
-                    listMovie.clear();
+                    if (listMovie != null){
+                        listMovie.clear();
+
+                    }
                     recyclerViewAdapter.notifyAdapter();
 
                    // initList();
@@ -171,11 +179,11 @@ public class RechercheFragment extends Fragment {
             public void onItemClick(View view, int position) {
 
                 Toast.makeText(getActivity(),"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
-                Intent movieClickActivity = new Intent(getActivity(), MovieSearch.class);
+                Intent movieClickActivity = new Intent(getActivity(), MovieDetails.class);
                 Bundle b = new Bundle();
                 Movie movie = (Movie) listMovie.get(position);
                 String nomSelect = movie.getTitle();
-                b.putString(FilmFragment.NOM_FILM, nomSelect);
+                b.putString(SEARCH, SEARCH);
                 b.putInt("pos",position);
                 movieClickActivity.putExtras(b); //Put your id to your next Intent
                 startActivity(movieClickActivity);
@@ -191,5 +199,17 @@ public class RechercheFragment extends Fragment {
             }
         });
 
+    }
+    private class MyFocusChangeListener implements View.OnFocusChangeListener {
+
+        public void onFocusChange(View v, boolean hasFocus){
+
+            if(v.getId() == R.id.txtsearch && !hasFocus) {
+
+                InputMethodManager imm =  (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+            }
+        }
     }
 }

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.projetv2.MovieNowPlayingDetails;
-import com.example.projetv2.MoviePopularDetails;
+import com.example.projetv2.MovieDetails;
+import com.example.projetv2.MovieToutAfficher;
 import com.example.projetv2.R;
 import com.example.projetv2.RecyclerViewAdapter;
 
@@ -40,17 +39,70 @@ public class FilmFragment extends Fragment {
     public  static List<Movie> moviePopular;
     public static List<Movie> listFavoris = new ArrayList<>();
     public static final String key = "1abe855bc465dce9287da07b08a664eb";
-    public static final String NOM_FILM = "nomFilm";
-    private FilmViewModel homeViewModel;
+    public static final String POPULAR = "popular";
+    public static final String NOW = "now";
     public Button button ;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        View root = inflater.inflate(R.layout.fragment_films, container, false);
 
 
-                fetchTmdbData();
+        recyclerNowPlaying = root.findViewById(R.id.recycler);
+        //  recyclerFavoris.setHasFixedSize(true);
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerNowPlaying.setLayoutManager(horizontalLayoutManager);
 
+        recyclerPopular = root.findViewById(R.id.recycler2);
+        //recyclerPopular.setHasFixedSize(true);
+        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerPopular.setLayoutManager(horizontalLayoutManager2);
+
+
+        if(moviePopular == null || movieNowPlaying == null){
+            fetchTmdbData();
+        }else {
+            startRecyclerPopular();
+            startRecyclerNowPlaying();
+        }
+
+        Button button = (Button) root.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Do something in response to button click
+                Intent myIntent = new Intent(getActivity(), MovieToutAfficher.class);
+                Bundle b = new Bundle();
+                //   String nomSelect = movie.getTitle();
+                b.putString(NOW,NOW);
+                //   b.putInt("pos",position);
+                myIntent.putExtras(b); //Put your id to your next Intent
+
+                startActivity(myIntent);
+                // myIntent.putExtra("key", value); //Optional parameters
+                // CurrentActivity.this.startActivity(myIntent);
+             /*  final RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(listFavoris, new RecyclerViewAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        // Do something in response to button click
+                        Intent myIntent = new Intent(getActivity(), MovieToutAfficher.class);
+                        Bundle b = new Bundle();
+                        //   String nomSelect = movie.getTitle();
+                        b.putString(NOW,NOW);
+                        //   b.putInt("pos",position);
+                        myIntent.putExtras(b); //Put your id to your next Intent
+
+                        startActivity(myIntent);
+                        // myIntent.putExtra("key", value); //Optional parameters
+                        // CurrentActivity.this.startActivity(myIntent);
+                    }
+
+
+                },2);*/
+
+            }
+        });
 
        /* Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -66,32 +118,6 @@ public class FilmFragment extends Fragment {
 
 
 
-
-       // homeViewModel =
-             //   ViewModelProviders.of(this).get(FilmViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_films, container, false);
-
-
-        recyclerNowPlaying = root.findViewById(R.id.recycler);
-        //  recyclerFavoris.setHasFixedSize(true);
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerNowPlaying.setLayoutManager(horizontalLayoutManager);
-
-        recyclerPopular = root.findViewById(R.id.recycler2);
-        //recyclerPopular.setHasFixedSize(true);
-        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerPopular.setLayoutManager(horizontalLayoutManager2);
-
-
-
-
-      /*  final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
 
 
 
@@ -155,12 +181,12 @@ public class FilmFragment extends Fragment {
 
 
                 Toast.makeText(getActivity(),"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
-                Intent movieClickActivity = new Intent(getActivity(), MovieNowPlayingDetails.class);
+                Intent movieClickActivity = new Intent(getActivity(), MovieDetails.class);
 
                 Bundle b = new Bundle();
                 Movie movie = (Movie) movieNowPlaying.get(position);
                 String nomSelect = movie.getTitle();
-                b.putString(NOM_FILM, nomSelect);
+                b.putString(NOW, NOW);
                 b.putInt("pos",position);
                 movieClickActivity.putExtras(b); //Put your id to your next Intent
                 startActivity(movieClickActivity);
@@ -183,12 +209,12 @@ public class FilmFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(getActivity()," en position " + position, Toast.LENGTH_LONG).show();
-                Intent movieClickActivity = new Intent(getActivity(), MoviePopularDetails.class);
+                Intent movieClickActivity = new Intent(getActivity(), MovieDetails.class);
 
                 Bundle b = new Bundle();
                 Movie movie = (Movie) moviePopular.get(position);
                   String nomSelect = movie.getTitle();
-                  b.putString(NOM_FILM, nomSelect);
+                  b.putString(POPULAR, POPULAR);
                  b.putInt("pos",position);
                   movieClickActivity.putExtras(b); //Put your id to your next Intent
                 startActivity(movieClickActivity);

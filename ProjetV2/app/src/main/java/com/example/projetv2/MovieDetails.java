@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projetv2.ui.favoris.FavorisFragment;
 import com.example.projetv2.ui.films.FilmFragment;
+import com.example.projetv2.ui.recherche.RechercheFragment;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -34,7 +36,7 @@ import service.TmdbService;
 import static com.example.projetv2.MainActivity.key;
 import static com.example.projetv2.MainActivity.NOM_FILM;
 
-public class MovieNowPlayingDetails extends YouTubeBaseActivity
+public class MovieDetails extends YouTubeBaseActivity
         implements YouTubePlayer.OnInitializedListener {
     private final String APIYoutube = "AIzaSyBbf-y_8UUB7AYcqkvHSbE_fJ7GVdIzcxw";
     public static final String key = "1abe855bc465dce9287da07b08a664eb";
@@ -56,50 +58,45 @@ public class MovieNowPlayingDetails extends YouTubeBaseActivity
         uploadFeature();
         youTubePlayerView = findViewById(R.id.youtubeplayerview);
         youTubePlayerView.initialize(APIYoutube, this);
-       /* TextView movieTitle = findViewById(R.id.title);
-        TextView movieRealisateur = findViewById(R.id.realisateur);
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null) {
-            int studentId = bundle.getInt(NOM_FILM);
-            Movie movie = StudentContent.ITEMS.get(studentId);
 
-            studentFirstName.setText(student.firstName);
-            studentLastName.setText(student.lastName);
-            studentAge.setText(student.age + " yo");
-            studentGender.setText(student.gender);
-        }*/
     }
 
     private void uploadFeature() {
         Bundle b = getIntent().getExtras();
-        int value = -1; // or other values
-        String nomfilm="";
+        int value = -1; // or
+        // other values
+        String listPopular="";
+        String listFavoris="";
+        String listNow="";
+        String listsearch="";
 
         if(b != null){
-            nomfilm= b.getString(NOM_FILM);
+            listPopular= b.getString(FilmFragment.POPULAR);
+            listNow= b.getString(FilmFragment.NOW);
+            listsearch= b.getString(RechercheFragment.SEARCH);
+            listFavoris= b.getString(FavorisFragment.FAVORIS);
+
             pos = b.getInt("pos");
-            Log.i("heazazaazzayyyy", nomfilm);
+          // Log.i("heazazaazzayyyy", listPopular);
+        }
+        if (listPopular!=null && listPopular.equals(FilmFragment.POPULAR) ) {
+            selectedMovie = FilmFragment.moviePopular.get(pos);
+            Log.i("skulurt", selectedMovie.getTitle());
+        }else if ( listNow!=null && listNow.equals(FilmFragment.NOW) ) {
+            selectedMovie = FilmFragment.movieNowPlaying.get(pos);
+             Log.i("skulurt", selectedMovie.getTitle());
+        }else if (listsearch!=null && listsearch.equals(RechercheFragment.SEARCH)  ) {
+            selectedMovie = RechercheFragment.listMovie.get(pos);
+            // Log.i("skulurt", selectedMovie.getTitle());
+        }else if (listFavoris!=null && listFavoris.equals(FavorisFragment.FAVORIS)  ) {
+            selectedMovie = FavorisFragment.listFavoris.get(pos);
+            Log.i("skulurt", selectedMovie.getTitle());
         }
 
 
-        selectedMovie = FilmFragment.movieNowPlaying.get(pos);
-        Log.i("skulurt", selectedMovie.getTitle());
         setDetails();
-      /*  TmdbService tmdbService = RetrofitClientInstance.getlnstance().create(TmdbService.class);
-        tmdbService.getMoviesNowPlaying(key).enqueue(new Callback<MovieCollection>() {
-            @Override
-            public void onResponse(Call<MovieCollection> call, Response<MovieCollection> response) {
-                ArrayList<Movie> movieCollection=response.body().getMovieList();
-                selectedMovie = movieCollection.get(pos);
-               setDetails();
-            }
-
-            @Override
-            public void onFailure(Call<MovieCollection> call, Throwable t) {
 
 
-            }
-        });*/
     }
 
     private void getMovieVideos() {

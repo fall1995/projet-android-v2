@@ -37,7 +37,10 @@ public class Movie {
     }
 
     public String getImage() {
-
+        if (image==null){
+            String urlImage ="https://stica.fr/3155-large_default/clap-de-cinema.jpg";
+            return urlImage;
+        }
         String urlImage = "https://image.tmdb.org/t/p/w500";
         return urlImage+image;
     }

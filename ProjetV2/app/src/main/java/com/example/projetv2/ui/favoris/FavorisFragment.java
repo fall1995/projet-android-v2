@@ -14,8 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.projetv2.MovieFavoris;
-import com.example.projetv2.MovieNowPlayingDetails;
+import com.example.projetv2.MovieDetails;
 import com.example.projetv2.R;
 import com.example.projetv2.RecyclerViewAdapter;
 import com.example.projetv2.ui.films.FilmFragment;
@@ -28,13 +27,11 @@ public class FavorisFragment extends Fragment {
 
     public static List<Movie> listFavoris;
     public static RecyclerView recyclerFavoris;
-
-    private NotificationsViewModel notificationsViewModel;
+    public static final String FAVORIS = "favoris";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_favoris, container, false);
 
         recyclerFavoris = root.findViewById(R.id.recyclerFavoris);
@@ -63,12 +60,12 @@ public class FavorisFragment extends Fragment {
 
 
                 Toast.makeText(getActivity(),"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
-                Intent movieClickActivity = new Intent(getActivity(), MovieFavoris.class);
+                Intent movieClickActivity = new Intent(getActivity(), MovieDetails.class);
 
                 Bundle b = new Bundle();
                 Movie movie = (Movie) listFavoris.get(position);
                 String nomSelect = movie.getTitle();
-                b.putString(FilmFragment.NOM_FILM, nomSelect);
+                b.putString(FAVORIS, FAVORIS);
                 b.putInt("pos",position);
                 movieClickActivity.putExtras(b); //Put your id to your next Intent
                 startActivity(movieClickActivity);

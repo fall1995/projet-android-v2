@@ -29,8 +29,9 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
     private ImageView imageView;
     private LikeButton button;
     private List<Movie> list;
+    private int n;
 
-    public MyViewHolderMovie(View itemView, List<Movie> list,int n) {
+    public MyViewHolderMovie(View itemView, List<Movie> list) {
         super(itemView);
         this.list = list;
         this.newItemView = itemView;
@@ -92,6 +93,8 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
        String name = movie.getTitle();
        title.setText(name);
         Glide.with(newItemView).load(movie.getImage()).into(imageView);
+
+
 
        // Log.i("movdsiplay","moovie="+movie.getTitle());
         for (int i=0;i<FilmFragment.listFavoris.size();i++){

@@ -1,6 +1,5 @@
 package com.example.projetv2;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +19,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolderMovie>
     public RecyclerViewAdapter(List<Movie> movieList, OnItemClickListener listener,int n) {
         MovieList = movieList;
         this.listener = listener;
+        this.n = n;
     }
 
 
     @Override
     public MyViewHolderMovie onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
-        return new MyViewHolderMovie(view,MovieList,n);
+        if (n==1){
+            View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recherche, parent, false);
+            return new MyViewHolderMovie(view,MovieList);
+        }else{
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
+            return new MyViewHolderMovie(view,MovieList);
+        }
     }
 
     @Override

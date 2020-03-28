@@ -20,9 +20,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="150dp"
                 android:layout_height="45dp"
-                android:text="A l'affiche"
+                android:text="A L'AFFICHE"
                 android:textColor="@color/white"
-                android:textSize="30dp"
+                android:textSize="22dp"
                 android:textStyle="bold"
 
 
@@ -35,13 +35,20 @@
                 android:orientation="vertical" >
 
 
-
             </androidx.recyclerview.widget.RecyclerView>
+
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button"
+                android:onClick="skurt"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#4a4a4a"/>
-
 
 
             <TextView
@@ -49,9 +56,9 @@
 
                 android:layout_width="150dp"
                 android:layout_height="45dp"
-                android:text="Populaire"
+                android:text="POPULAIRE"
                 android:textColor="@color/white"
-                android:textSize="30dp"
+                android:textSize="23dp"
                 android:textStyle="bold"
 
 

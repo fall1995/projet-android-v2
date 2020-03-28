@@ -23,10 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieNowPlayingDetails"/>
-        <activity android:name=".MoviePopularDetails"/>
-        <activity android:name=".MovieSearch"/>
-        <activity android:name=".MovieFavoris"/>
+        <activity android:name=".MovieDetails"/>
+        <activity android:name=".MovieToutAfficher"/>
     </application>
 
 </manifest>

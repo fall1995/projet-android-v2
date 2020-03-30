@@ -42,67 +42,53 @@ public class FilmFragment extends Fragment {
     public static final String POPULAR = "popular";
     public static final String NOW = "now";
     public Button button ;
+    public Button button2 ;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_films, container, false);
-
-
         recyclerNowPlaying = root.findViewById(R.id.recycler);
-        //  recyclerFavoris.setHasFixedSize(true);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerNowPlaying.setLayoutManager(horizontalLayoutManager);
-
         recyclerPopular = root.findViewById(R.id.recycler2);
-        //recyclerPopular.setHasFixedSize(true);
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerPopular.setLayoutManager(horizontalLayoutManager2);
 
 
-        if(moviePopular == null || movieNowPlaying == null){
+        if(moviePopular == null && movieNowPlaying == null){
             fetchTmdbData();
         }else {
-            startRecyclerPopular();
             startRecyclerNowPlaying();
+            startRecyclerPopular();
+
         }
 
         Button button = (Button) root.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Do something in response to button click
                 Intent myIntent = new Intent(getActivity(), MovieToutAfficher.class);
                 Bundle b = new Bundle();
-                //   String nomSelect = movie.getTitle();
                 b.putString(NOW,NOW);
-                //   b.putInt("pos",position);
-                myIntent.putExtras(b); //Put your id to your next Intent
-
+              //  b.putInt("pop",1);
+                myIntent.putExtras(b);
                 startActivity(myIntent);
-                // myIntent.putExtra("key", value); //Optional parameters
-                // CurrentActivity.this.startActivity(myIntent);
-             /*  final RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(listFavoris, new RecyclerViewAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-
-                        // Do something in response to button click
-                        Intent myIntent = new Intent(getActivity(), MovieToutAfficher.class);
-                        Bundle b = new Bundle();
-                        //   String nomSelect = movie.getTitle();
-                        b.putString(NOW,NOW);
-                        //   b.putInt("pos",position);
-                        myIntent.putExtras(b); //Put your id to your next Intent
-
-                        startActivity(myIntent);
-                        // myIntent.putExtra("key", value); //Optional parameters
-                        // CurrentActivity.this.startActivity(myIntent);
-                    }
-
-
-                },2);*/
 
             }
         });
+
+        Button button2 = (Button) root.findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getActivity(), MovieToutAfficher.class);
+                Bundle b = new Bundle();
+                b.putString(POPULAR,POPULAR);
+                myIntent.putExtras(b);
+                startActivity(myIntent);
+
+            }
+        });
+
 
        /* Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -135,15 +121,18 @@ public class FilmFragment extends Fragment {
             public void onResponse(Call<MovieCollection> call, Response<MovieCollection> response) {
 
                 movieNowPlaying =response.body().getMovieList();
-              //  Log.i("log", "taille"+movieNowPlaying.size()  );
-                 // Log.i("log", movieNowPlaying.get(0).getTitle()   );
-
                 startRecyclerNowPlaying();
+              //  Log.i("log", "taille"+movieNowPlaying.size()  );
+                 //
+                //
+             //   Log.i("id", "id "+  movieNowPlaying.get(0).getId()   );
+
+
             }
 
             @Override
             public void onFailure(Call<modele.MovieCollection> call, Throwable t) {
-                Log.i("test","marche paaaaas");
+                Log.i("toutafficher","marche paaaaas");
             }
 
         });
@@ -192,7 +181,7 @@ public class FilmFragment extends Fragment {
                 startActivity(movieClickActivity);
 
             }
-        },0);
+        },100);
         recyclerNowPlaying.setAdapter(recyclerViewAdapter);
         recyclerNowPlaying.setTag(recyclerViewAdapter);
 
@@ -220,7 +209,7 @@ public class FilmFragment extends Fragment {
                 startActivity(movieClickActivity);
                 //finish();
             }
-        },0);
+        },200);
         recyclerPopular.setAdapter(recyclerViewAdapter);
 
         recyclerPopular.setOnClickListener(new View.OnClickListener() {
@@ -231,22 +220,7 @@ public class FilmFragment extends Fragment {
         });
     }
 
-    public void ajouterList (List<Movie> movieList){
-        int c =0;
-       // Log.i("log46", "taille"+listMovie.size()  );
-            for(int i=0; i<movieList.size();i++){
-                for (int j=0; j<listMovie.size();j++){
-                    if(movieList.get(i).getTitle() == listMovie.get(j).getTitle()){
-                      c ++;
-                    }
-                    if(c ==0){
-                        listMovie.add(movieList.get(i));
-                    }
-                    c =0;
-                }
-            }
 
-    }
 
     public void addFavoris (View v){
         Log.i("log21","ajouter au favoris");

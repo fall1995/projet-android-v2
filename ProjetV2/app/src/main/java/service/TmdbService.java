@@ -1,5 +1,6 @@
 package service;
 
+import modele.CastingCollection;
 import modele.MovieCollection;
 import modele.VideosCollection;
 import retrofit2.Call;
@@ -20,6 +21,10 @@ public interface TmdbService {
 
     @GET( "movie/{movie_id}/videos")
     Call<VideosCollection> getMovieVideos(@Path("movie_id") int movie_id, @Query ("api_key") String key);
+
+    @GET( "movie/{movie_id}/credits")
+    Call<CastingCollection> getMovieDetails(@Path("movie_id") int movie_id, @Query ("api_key") String key);
+
 
 
 }

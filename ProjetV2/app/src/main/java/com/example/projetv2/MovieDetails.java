@@ -1,30 +1,34 @@
 package com.example.projetv2;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.text.LoginFilter;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.projetv2.ui.favoris.FavorisFragment;
 import com.example.projetv2.ui.films.FilmFragment;
 import com.example.projetv2.ui.recherche.RechercheFragment;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import modele.Cast;
+import modele.CastingCollection;
 import modele.Movie;
-import modele.MovieCollection;
 import modele.Video;
 import modele.VideosCollection;
 import retrofit2.Call;
@@ -32,9 +36,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import service.RetrofitClientInstance;
 import service.TmdbService;
-
-import static com.example.projetv2.MainActivity.key;
-import static com.example.projetv2.MainActivity.NOM_FILM;
 
 public class MovieDetails extends YouTubeBaseActivity
         implements YouTubePlayer.OnInitializedListener {
@@ -46,18 +47,27 @@ public class MovieDetails extends YouTubeBaseActivity
     private YouTubePlayer youTubePlayer;
     private Movie selectedMovie;
     private TextView movieTitle;
-    private TextView movieRealisateur;
+    private TextView sortie;
+    private List<Cast> castinglist;
+    private TextView movieOverview;
     private RatingBar ratingBar;
     private int pos;
+    private ImageView imageView;
+    private  RecyclerView recyclerCast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_movie_detail);
+        recyclerCast = findViewById(R.id.cast);
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerCast.setLayoutManager(horizontalLayoutManager);
         uploadFeature();
         youTubePlayerView = findViewById(R.id.youtubeplayerview);
         youTubePlayerView.initialize(APIYoutube, this);
+        getDetails();
+
 
     }
 
@@ -130,23 +140,49 @@ public class MovieDetails extends YouTubeBaseActivity
         });
     }
 
-    private void setDetails(){
-        movieTitle=findViewById(R.id.title);
-        movieRealisateur=findViewById(R.id.realisateur);
-        ratingBar = findViewById(R.id.movie_rating);
+    private void getDetails() {
+        TmdbService tmdbService = RetrofitClientInstance.getlnstance().create(TmdbService.class);
+        tmdbService.getMovieDetails(selectedMovie.getId(),key).enqueue(new Callback<CastingCollection>() {
+            @Override
+            public void onResponse(Call<CastingCollection> call, Response<CastingCollection> response) {
 
+                castinglist =response.body().getCast();
+             //   Log.i("ofcurse","actor " + castinglist.get(0).getName() );
+                startRecyclerCast();
+
+            }
+
+            @Override
+            public void onFailure(Call<CastingCollection> call, Throwable t) {
+                Log.i("neein","neeein");
+            }
+
+        });
+
+    }
+
+    private void setDetails(){
+        movieTitle=findViewById(R.id.titre);
+        movieOverview=findViewById(R.id.overview);
+        ratingBar = findViewById(R.id.movie_rating);
+        imageView = (ImageView) findViewById(R.id.image_details);
+        sortie = findViewById(R.id.sortie);
+
+
+        Glide.with(this).load(selectedMovie.getImage()).into(imageView);
         double voteDouble = selectedMovie.getVoteAverage();
         float vote = (float)voteDouble/2;
         Log.i("nooote", "je note ici " + vote);
 
         ratingBar.setRating(vote);
-//        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-//        stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
 
+        sortie.setText(selectedMovie.getSortie());
         movieTitle.setText(selectedMovie.getTitle());
+        movieOverview.setText(selectedMovie.getOverview());
       //  movieRealisateur.setText(selectedMovie.getProperties().getCity());
-        //age.setText(student.age + " ans");
-        //gender.setText(student.gender);
+
     }
 
     @Override
@@ -160,5 +196,34 @@ public class MovieDetails extends YouTubeBaseActivity
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
+    }
+
+
+    private void startRecyclerCast(){
+        Log.i("castrecyler","castore");
+        final AdapterCast recyclerViewAdapter = new AdapterCast(castinglist, new AdapterCast.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //Toast.makeText(getApplicationContext()," en position " + position, Toast.LENGTH_LONG).show();
+               /* Intent movieClickActivity = new Intent(getApplicationContext(), MovieDetails.class);
+
+                Bundle b = new Bundle();
+                Movie movie = (Movie) moviePopular.get(position);
+                String nomSelect = movie.getTitle();
+                b.putString(POPULAR, POPULAR);
+                b.putInt("pos",position);
+                movieClickActivity.putExtras(b); //Put your id to your next Intent
+                startActivity(movieClickActivity);*/
+                //finish();
+            }
+        },3);
+        recyclerCast.setAdapter(recyclerViewAdapter);
+
+        recyclerCast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("click","je viens de cliquer sur ..");
+            }
+        });
     }
 }

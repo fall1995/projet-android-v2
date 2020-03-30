@@ -7,19 +7,34 @@
     android:orientation="vertical"
     >
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:hintEnabled="false"
+        android:layout_marginTop="10dp"
+        app:endIconMode="clear_text">
+
+    <com.google.android.material.textfield.TextInputEditText
+
+        android:id="@+id/txtsearch"
+        android:layout_marginLeft="5dp"
+        android:layout_width="380dp"
+        android:paddingLeft="5dp"
+        android:layout_height="35dp"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:hint="@string/recherche"
+        android:inputType="text"
+        android:background="@drawable/rounded_edittext"
+        android:textColor="@color/white"
+
+        android:textColorHint="@color/white"
+        app:endIconMode="clear_text"
+        android:textCursorDrawable="@drawable/color_cursor"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-        <EditText
-            android:id="@+id/txtsearch"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:maxLines="1"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
-            android:hint="Search"
-            android:inputType="text"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_search"

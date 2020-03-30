@@ -31,13 +31,13 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
     private List<Movie> list;
     private int n;
 
-    public MyViewHolderMovie(View itemView, List<Movie> list) {
+    public MyViewHolderMovie(View itemView, List<Movie> list, int n) {
         super(itemView);
         this.list = list;
         this.newItemView = itemView;
-        title = (TextView)itemView.findViewById(R.id.item_title);
+        title = (TextView) itemView.findViewById(R.id.item_title);
         imageView = (ImageView) itemView.findViewById(R.id.item_image);
-
+        this.n = n;
 
         //button = (Button) itemView.findViewById(R.id.ajouter);
         button = (LikeButton) itemView.findViewById(R.id.spark_button);
@@ -50,7 +50,7 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
 
             @Override
             public void unLiked(LikeButton likeButton) {
-            supFavoris(likeButton.getRootView());
+                supFavoris(likeButton.getRootView());
             }
         });
         //button.setOnClickListener(this);
@@ -78,10 +78,9 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
         });*/
 
 
-
     }
 
-    public void display(Movie movie){
+    public void display(Movie movie) {
        /* String name = feature.getProperties().getName();
         String rue = feature.getProperties().getStreet();
         String codePostal = ""+feature.getProperties().getPostalCode();
@@ -89,23 +88,22 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
         String adresse = rue + "\n" + codePostal + " - " + ville;
 
 */
-       int c=0;
-       String name = movie.getTitle();
-       title.setText(name);
+        int c = 0;
+        String name = movie.getTitle();
+        title.setText(name);
         Glide.with(newItemView).load(movie.getImage()).into(imageView);
 
 
-
-       // Log.i("movdsiplay","moovie="+movie.getTitle());
-        for (int i=0;i<FilmFragment.listFavoris.size();i++){
-            if (FilmFragment.listFavoris.get(i).getTitle().equals(name)){
+        // Log.i("movdsiplay","moovie="+movie.getTitle());
+        for (int i = 0; i < FilmFragment.listFavoris.size(); i++) {
+            if (FilmFragment.listFavoris.get(i).getTitle().equals(name)) {
                 c++;
             }
         }
-        if (c>0){
-         //   Log.i("bingodesbengos","enfiin");
+        if (c > 0) {
+            //   Log.i("bingodesbengos","enfiin");
             button.setLiked(true);
-        }else{
+        } else {
             button.setLiked(false);
         }
     }
@@ -113,41 +111,47 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
 
     @Override
     public void onClick(View v) {
-            addFavoris(v);
+        addFavoris(v);
     }
 
-    public void addFavoris (View v)
-    {
+    public void addFavoris(View v) {
 
-
-       FilmFragment.listFavoris.add(list.get(this.getAdapterPosition()));
-        Log.i("add","tailleListe "+FilmFragment.listFavoris.size());
+        FilmFragment.listFavoris.add(list.get(this.getAdapterPosition()));
+        Log.i("add", "tailleListe " + FilmFragment.listFavoris.size());
         FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
         FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
 
     }
-    public void supFavoris(View v){
 
-        for (int i=0;i<FilmFragment.listFavoris.size();i++){
-            Log.i("supp","tailleListeavantsupp "+FilmFragment.listFavoris.size());
+    public void supFavoris(View v) {
 
-            Log.i("testi","i = "+i);
-            Log.i(" listadapter","t = "+ this.getLayoutPosition());
+        for (int i = 0; i < FilmFragment.listFavoris.size(); i++) {
+            Log.i("supp", "tailleListeavantsupp " + FilmFragment.listFavoris.size());
 
-            if (FilmFragment.listFavoris.get(i).getTitle().equals(list.get(this.getLayoutPosition()).getTitle())){
+            Log.i("testi", "i = " + i);
+            Log.i(" listadapter", "t = " + this.getLayoutPosition());
+
+            if (FilmFragment.listFavoris.get(i).getTitle().equals(list.get(this.getLayoutPosition()).getTitle())) {
                 FilmFragment.listFavoris.remove(i);
                 //notifyDataSetChanged();
 
             }
-            Log.i("supp2","tailleListeApressupp "+FilmFragment.listFavoris.size());
+
 
             if (FavorisFragment.recyclerFavoris != null) {
                 FavorisFragment.recyclerFavoris.getAdapter().notifyDataSetChanged();
 
             }
+            Log.i("test43", "test =" + n);
+            if (n == 100) {
+                FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
 
-            FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
-            FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
+            }
+            if (n == 200) {
+                FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
+            }
+
+
         }
 
     }

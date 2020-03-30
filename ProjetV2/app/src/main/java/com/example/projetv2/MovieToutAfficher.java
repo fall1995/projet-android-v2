@@ -4,11 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -17,19 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.projetv2.ui.favoris.FavorisFragment;
 import com.example.projetv2.ui.films.FilmFragment;
 import com.example.projetv2.ui.recherche.RechercheFragment;
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
 
 import modele.Movie;
-import modele.Video;
-import modele.VideosCollection;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import service.RetrofitClientInstance;
-import service.TmdbService;
 
 public class MovieToutAfficher extends AppCompatActivity {
     private final String APIYoutube = "AIzaSyBbf-y_8UUB7AYcqkvHSbE_fJ7GVdIzcxw";
@@ -49,7 +33,7 @@ public class MovieToutAfficher extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.test);
+        setContentView(R.layout.toutafficher);
 
         recyclerView = findViewById(R.id.recyclerToutAfficher);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -60,8 +44,6 @@ public class MovieToutAfficher extends AppCompatActivity {
 
     private void uploadFeature() {
         Bundle b = getIntent().getExtras();
-        int value = -1; // or
-        // other values
 
 
         if(b != null){
@@ -70,15 +52,15 @@ public class MovieToutAfficher extends AppCompatActivity {
             listsearch= b.getString(RechercheFragment.SEARCH);
             listFavoris= b.getString(FavorisFragment.FAVORIS);
 
-            pos = b.getInt("pos");
-          // Log.i("heazazaazzayyyy", listPopular);
+
+
         }
         if (listPopular!=null && listPopular.equals(FilmFragment.POPULAR) ) {
+startRecyclerPopular();
 
-
-        }else if ( listNow!=null && listNow.equals(FilmFragment.NOW) ) {
+        }else if ( listNow!=null && listNow.equals(FilmFragment.NOW)) {
           //Log.i("call","of");
-
+            startRecyclerNow();
         }else if (listsearch!=null && listsearch.equals(RechercheFragment.SEARCH)  ) {
 
             // Log.i("skulurt", selectedMovie.getTitle());
@@ -89,13 +71,13 @@ public class MovieToutAfficher extends AppCompatActivity {
 
     //    setDetails();
 
-    startRecycler();
+
     }
 
 
 
 
-    public void startRecycler(){
+    public void startRecyclerNow(){
 
         recyclerViewAdapter = new RecyclerViewAdapter(FilmFragment.movieNowPlaying, new RecyclerViewAdapter.OnItemClickListener() {
 
@@ -113,7 +95,7 @@ public class MovieToutAfficher extends AppCompatActivity {
                 startActivity(movieClickActivity);
 
             }
-        },1);
+        },2);
         recyclerView.setAdapter(recyclerViewAdapter);
 
         recyclerView.setOnClickListener(new View.OnClickListener() {
@@ -125,5 +107,35 @@ public class MovieToutAfficher extends AppCompatActivity {
 
     }
 
+
+    public void startRecyclerPopular(){
+
+        recyclerViewAdapter = new RecyclerViewAdapter(FilmFragment.moviePopular, new RecyclerViewAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View view, int position) {
+
+                //   Toast.makeText(MovieToutAfficher.this,"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
+                Intent movieClickActivity = new Intent(MovieToutAfficher.this, MovieDetails.class);
+                Bundle b = new Bundle();
+                Movie movie = (Movie) FilmFragment.moviePopular.get(position);
+                String nomSelect = movie.getTitle();
+                b.putString(FilmFragment.NOW, FilmFragment.NOW);
+                b.putInt("pos",position);
+                movieClickActivity.putExtras(b); //Put your id to your next Intent
+                startActivity(movieClickActivity);
+
+            }
+        },2);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("click","je viens de cliquer sur ..");
+            }
+        });
+
+    }
 
 }

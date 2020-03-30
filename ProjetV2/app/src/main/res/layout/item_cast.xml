@@ -27,33 +27,24 @@
             android:text="favoris" />-->
 
         <ImageView
-            android:id="@+id/item_image"
-            android:layout_width="wrap_content"
-            android:layout_height="270dp"
+            android:id="@+id/actor_image"
+            android:layout_width="150dp"
+            android:layout_height="220dp"
             android:scaleType="fitXY" />
 
 
-        <com.like.LikeButton
-            android:id="@+id/spark_button"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            app:like_drawable="@drawable/ic_star_on"
-            app:unlike_drawable="@drawable/ic_star_off"
-            app:icon_size="15dp"
-            app:anim_scale_factor="2"
-
-            />
 
     </androidx.cardview.widget.CardView>
 
 
 <TextView
-    android:id="@+id/item_title"
+    android:id="@+id/actor_name"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:text="TextView"
+    android:textStyle="bold"
     android:gravity="center"
-    android:textColor="@color/white">
+    android:textColor="@color/dark">
 
 
 </TextView>

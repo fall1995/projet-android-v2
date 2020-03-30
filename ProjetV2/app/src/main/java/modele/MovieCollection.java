@@ -14,16 +14,4 @@ public class MovieCollection {
         return movieList;
     }
 
-  /*  public int getNumMovie(String title){
-        String maValeur = title;
-        int monIndice =0;
-
-        for (int i=0 ; i< movieList.size() ; i++) {
-            if (maValeur.equals(movieList.indexOf(i))){
-                monIndice = i;
-            }
-    }
-        return monIndice;
-
-}*/
 }

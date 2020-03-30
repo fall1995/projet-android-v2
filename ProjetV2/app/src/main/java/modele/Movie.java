@@ -2,7 +2,11 @@ package modele;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Movie {
+
+
 
     @SerializedName("id")
     private int id;
@@ -12,6 +16,16 @@ public class Movie {
 
     @SerializedName("poster_path")
     private String image ;
+
+    @SerializedName("overview")
+    private String overview ;
+
+    public String getSortie() {
+        return sortie;
+    }
+
+    @SerializedName("release_date")
+    private String sortie ;
 
     public Double getVoteAverage() {
         return voteAverage;
@@ -23,6 +37,10 @@ public class Movie {
 
     @SerializedName("vote_average")
     private Double voteAverage;
+
+    public String getOverview() {
+        return overview;
+    }
 
     public int getId() {
         return id;

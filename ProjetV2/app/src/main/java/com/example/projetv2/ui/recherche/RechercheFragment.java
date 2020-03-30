@@ -23,6 +23,8 @@ import com.example.projetv2.MovieDetails;
 import com.example.projetv2.R;
 import com.example.projetv2.RecyclerViewAdapter;
 import com.example.projetv2.ui.films.FilmFragment;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public class RechercheFragment extends Fragment {
 
     public ArrayAdapter<String> adapter;
 
-    public EditText editText;
+    public TextInputEditText editText;
     //public ListView listView;
     public static List<Movie> listMovie;
     public List<Movie> listFixe;
@@ -47,7 +49,7 @@ public class RechercheFragment extends Fragment {
     public ArrayList<String> listItems;
     private RecyclerView recyclerView;
     public RecyclerViewAdapter recyclerViewAdapter;
-    public static final String SEARCH = "search";
+    public static final String SEARCH = "Rechercher";
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,6 +68,10 @@ public class RechercheFragment extends Fragment {
         recyclerView = root.findViewById(R.id.recycler_search);
        // listView =  root.findViewById(R.id.listview);
         editText = root.findViewById(R.id.txtsearch);
+        editText.requestFocus();
+        InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
         View.OnFocusChangeListener ofcListener = new MyFocusChangeListener();
         editText.setOnFocusChangeListener(ofcListener);
 
@@ -138,7 +144,7 @@ public class RechercheFragment extends Fragment {
 
             @Override
             public void onFailure(Call<modele.MovieCollection> call, Throwable t) {
-                Log.i("test", "marche paaaaas");
+                Log.i("toutafficher", "marche paaaaas");
             }
 
         });

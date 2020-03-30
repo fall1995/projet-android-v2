@@ -1,6 +1,8 @@
 package com.example.projetv2.ui.films;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +20,10 @@ import com.example.projetv2.MovieDetails;
 import com.example.projetv2.MovieToutAfficher;
 import com.example.projetv2.R;
 import com.example.projetv2.RecyclerViewAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +42,7 @@ public class FilmFragment extends Fragment {
     public static List<Movie> listMovie; //liste avec tous les films de toutes les categories
     public static List<Movie> movieNowPlaying;
     public  static List<Movie> moviePopular;
-    public static List<Movie> listFavoris = new ArrayList<>();
+    public static List<Movie> listFavoris ;
     public static final String key = "1abe855bc465dce9287da07b08a664eb";
     public static final String POPULAR = "popular";
     public static final String NOW = "now";
@@ -54,6 +59,7 @@ public class FilmFragment extends Fragment {
         recyclerPopular = root.findViewById(R.id.recycler2);
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerPopular.setLayoutManager(horizontalLayoutManager2);
+        loadData();
 
 
         if(moviePopular == null && movieNowPlaying == null){
@@ -169,7 +175,7 @@ public class FilmFragment extends Fragment {
             public void onItemClick(View view, int position) {
 
 
-                Toast.makeText(getActivity(),"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
+            //    Toast.makeText(getActivity(),"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
                 Intent movieClickActivity = new Intent(getActivity(), MovieDetails.class);
 
                 Bundle b = new Bundle();
@@ -188,7 +194,7 @@ public class FilmFragment extends Fragment {
         recyclerNowPlaying.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("click","je viens de cliquer sur ..");
+              //  Log.i("click","je viens de cliquer sur ..");
             }
         });
     }
@@ -197,7 +203,7 @@ public class FilmFragment extends Fragment {
         final RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(moviePopular, new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity()," en position " + position, Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity()," en position " + position, Toast.LENGTH_LONG).show();
                 Intent movieClickActivity = new Intent(getActivity(), MovieDetails.class);
 
                 Bundle b = new Bundle();
@@ -215,12 +221,22 @@ public class FilmFragment extends Fragment {
         recyclerPopular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("click","je viens de cliquer sur ..");
+               // Log.i("click","je viens de cliquer sur ..");
             }
         });
     }
 
+    private void  loadData(){
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("task list",null);
+        Type type = new TypeToken< ArrayList<Movie>>() {} .getType();
+        FilmFragment.listFavoris = gson.fromJson(json,type);
+        if (FilmFragment.listFavoris == null){
+            FilmFragment.listFavoris = new ArrayList<>();
+        }
 
+    }
 
     public void addFavoris (View v){
         Log.i("log21","ajouter au favoris");

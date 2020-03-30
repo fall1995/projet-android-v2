@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,9 +36,9 @@ public class FavorisFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_favoris, container, false);
 
         recyclerFavoris = root.findViewById(R.id.recyclerFavoris);
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerFavoris.setLayoutManager(horizontalLayoutManager);
-
+      //  LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+       // recyclerFavoris.setLayoutManager(horizontalLayoutManager);
+        recyclerFavoris.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
         listFavoris = FilmFragment.listFavoris;
         startRecyclerFavoris();
 
@@ -48,6 +49,7 @@ public class FavorisFragment extends Fragment {
                 textView.setText(s);
             }
         });*/
+
         return root;
     }
 
@@ -71,7 +73,7 @@ public class FavorisFragment extends Fragment {
                 startActivity(movieClickActivity);
 
             }
-        },0);
+        },2);
         recyclerFavoris.setAdapter(recyclerViewAdapter);
 
         recyclerFavoris.setOnClickListener(new View.OnClickListener() {

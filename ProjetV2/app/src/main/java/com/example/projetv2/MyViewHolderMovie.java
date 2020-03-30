@@ -1,11 +1,15 @@
 package com.example.projetv2;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.like.LikeButton;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +22,8 @@ import com.like.OnLikeListener;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import modele.Movie;
@@ -30,6 +36,7 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
     private LikeButton button;
     private List<Movie> list;
     private int n;
+
 
     public MyViewHolderMovie(View itemView, List<Movie> list, int n) {
         super(itemView);
@@ -120,7 +127,7 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
         Log.i("add", "tailleListe " + FilmFragment.listFavoris.size());
         FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
         FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
-
+        saveData();
     }
 
     public void supFavoris(View v) {
@@ -153,8 +160,29 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
 
 
         }
+saveData();
+    }
+
+    private void saveData(){
+        SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(FilmFragment.listFavoris);
+        editor.putString("task list",json);
+        editor.apply();
 
     }
 
+    private void  loadData(){
+        SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("task list",null);
+        Type type = new TypeToken< ArrayList<Movie>>() {} .getType();
+        FilmFragment.listFavoris = gson.fromJson(json,type);
+        if (FilmFragment.listFavoris == null){
+            FilmFragment.listFavoris = new ArrayList<>();
+        }
+
+    }
 
 }

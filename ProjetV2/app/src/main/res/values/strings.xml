@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjetV2</string>
+    <string name="app_name">AlloZizou</string>
     <string name="title_home">Films</string>
     <string name="title_dashboard">Recherche</string>
     <string name="title_notifications">Favoris</string>

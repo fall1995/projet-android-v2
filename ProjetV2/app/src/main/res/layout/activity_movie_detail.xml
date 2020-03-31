@@ -36,6 +36,18 @@
                     android:layout_marginTop="10dp"
                     android:scaleType="fitXY" />
 
+                <com.like.LikeButton
+                    android:id="@+id/spark_button2"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:like_drawable="@drawable/ic_star_on"
+                    app:unlike_drawable="@drawable/ic_star_off"
+                    app:icon_size="15dp"
+                    app:anim_scale_factor="2"
+                    android:layout_toRightOf="@id/sortie"
+                    android:layout_marginLeft="100dp"
+
+                    />
 
                 <TextView
                     android:id="@+id/titre"

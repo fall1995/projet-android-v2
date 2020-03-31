@@ -123,6 +123,7 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
 
     public void addFavoris(View v) {
 
+
         FilmFragment.listFavoris.add(list.get(this.getAdapterPosition()));
         Log.i("add", "tailleListe " + FilmFragment.listFavoris.size());
         FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
@@ -133,17 +134,13 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
     public void supFavoris(View v) {
 
         for (int i = 0; i < FilmFragment.listFavoris.size(); i++) {
-            Log.i("supp", "tailleListeavantsupp " + FilmFragment.listFavoris.size());
-
-            Log.i("testi", "i = " + i);
-            Log.i(" listadapter", "t = " + this.getLayoutPosition());
 
             if (FilmFragment.listFavoris.get(i).getTitle().equals(list.get(this.getLayoutPosition()).getTitle())) {
                 FilmFragment.listFavoris.remove(i);
                 //notifyDataSetChanged();
 
             }
-
+        }
 
             if (FavorisFragment.recyclerFavoris != null) {
                 FavorisFragment.recyclerFavoris.getAdapter().notifyDataSetChanged();
@@ -159,7 +156,7 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
             }
 
 
-        }
+
 saveData();
     }
 

@@ -1,6 +1,8 @@
 package com.example.projetv2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -23,6 +25,9 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.gson.Gson;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.util.List;
 
@@ -52,8 +57,13 @@ public class MovieDetails extends YouTubeBaseActivity
     private TextView movieOverview;
     private RatingBar ratingBar;
     private int pos;
+    private LikeButton button;
     private ImageView imageView;
     private  RecyclerView recyclerCast;
+    String listPopular="";
+    String listFavoris="";
+    String listNow="";
+    String listsearch="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +73,19 @@ public class MovieDetails extends YouTubeBaseActivity
         recyclerCast = findViewById(R.id.cast);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerCast.setLayoutManager(horizontalLayoutManager);
+        button = (LikeButton) findViewById(R.id.spark_button2);
+
+        button.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                addFavoris(likeButton.getRootView());
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                supFavoris(likeButton.getRootView());
+            }
+        });
         uploadFeature();
         youTubePlayerView = findViewById(R.id.youtubeplayerview);
         youTubePlayerView.initialize(APIYoutube, this);
@@ -75,10 +98,7 @@ public class MovieDetails extends YouTubeBaseActivity
         Bundle b = getIntent().getExtras();
         int value = -1; // or
         // other values
-        String listPopular="";
-        String listFavoris="";
-        String listNow="";
-        String listsearch="";
+
 
         if(b != null){
             listPopular= b.getString(FilmFragment.POPULAR);
@@ -91,16 +111,16 @@ public class MovieDetails extends YouTubeBaseActivity
         }
         if (listPopular!=null && listPopular.equals(FilmFragment.POPULAR) ) {
             selectedMovie = FilmFragment.moviePopular.get(pos);
-            Log.i("skulurt", selectedMovie.getTitle());
+         //   Log.i("skulurt", selectedMovie.getTitle());
         }else if ( listNow!=null && listNow.equals(FilmFragment.NOW) ) {
             selectedMovie = FilmFragment.movieNowPlaying.get(pos);
-             Log.i("skulurt", selectedMovie.getTitle());
+          //   Log.i("skulurt", selectedMovie.getTitle());
         }else if (listsearch!=null && listsearch.equals(RechercheFragment.SEARCH)  ) {
             selectedMovie = RechercheFragment.listMovie.get(pos);
             // Log.i("skulurt", selectedMovie.getTitle());
         }else if (listFavoris!=null && listFavoris.equals(FavorisFragment.FAVORIS)  ) {
             selectedMovie = FavorisFragment.listFavoris.get(pos);
-            Log.i("skulurt", selectedMovie.getTitle());
+          //  Log.i("skulurt", selectedMovie.getTitle());
         }
 
 
@@ -167,13 +187,26 @@ public class MovieDetails extends YouTubeBaseActivity
         ratingBar = findViewById(R.id.movie_rating);
         imageView = (ImageView) findViewById(R.id.image_details);
         sortie = findViewById(R.id.sortie);
-
+        int c =0;
 
         Glide.with(this).load(selectedMovie.getImage()).into(imageView);
         double voteDouble = selectedMovie.getVoteAverage();
         float vote = (float)voteDouble/2;
-        Log.i("nooote", "je note ici " + vote);
 
+        for (int i = 0; i < FilmFragment.listFavoris.size(); i++) {
+
+            if (FilmFragment.listFavoris.get(i).getTitle().equals(selectedMovie.getTitle())) {
+                c++;
+            }
+        }
+        Log.i("seyf1","t ="+  FilmFragment.listFavoris.size());
+        Log.i("seyf", "c" + c);
+        if (c > 0) {
+            //   Log.i("bingodesbengos","enfiin");
+            button.setLiked(true);
+        } else {
+            button.setLiked(false);
+        }
         ratingBar.setRating(vote);
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
@@ -225,5 +258,63 @@ public class MovieDetails extends YouTubeBaseActivity
                 Log.i("click","je viens de cliquer sur ..");
             }
         });
+    }
+
+    private void saveData(){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(FilmFragment.listFavoris);
+        editor.putString("task list",json);
+        editor.apply();
+
+    }
+
+    public void addFavoris(View v) {
+
+        if (listPopular!=null && listPopular.equals(FilmFragment.POPULAR) ) {
+
+            FilmFragment.listFavoris.add(FilmFragment.moviePopular.get(pos));
+
+        }else if ( listNow!=null && listNow.equals(FilmFragment.NOW) ) {
+            FilmFragment.listFavoris.add(FilmFragment.movieNowPlaying.get(pos));
+
+            //   Log.i("skulurt", selectedMovie.getTitle());
+        }
+
+       // Log.i("add", "tailleListe " + FilmFragment.listFavoris.size());
+        FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
+        FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
+        saveData();
+    }
+
+    public void supFavoris(View v) {
+
+        for (int i = 0; i < FilmFragment.listFavoris.size(); i++) {
+
+
+            if (FilmFragment.listFavoris.get(i).getTitle().equals(selectedMovie.getTitle())){
+                FilmFragment.listFavoris.remove(i);
+                //notifyDataSetChanged();
+
+            }
+
+
+            if (FavorisFragment.recyclerFavoris != null) {
+                FavorisFragment.recyclerFavoris.getAdapter().notifyDataSetChanged();
+
+            }
+
+
+                FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
+
+
+
+                FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
+
+
+
+        }
+        saveData();
     }
 }

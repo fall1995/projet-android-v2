@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -39,11 +38,13 @@ public class FilmFragment extends Fragment {
 
     public static RecyclerView recyclerNowPlaying;
     public static RecyclerView recyclerPopular;
-    public static List<Movie> listMovie; //liste avec tous les films de toutes les categories
+    public static RecyclerView recyclerupComming;
+    public static List<Movie> movieUpComing;
     public static List<Movie> movieNowPlaying;
     public  static List<Movie> moviePopular;
     public static List<Movie> listFavoris ;
     public static final String key = "1abe855bc465dce9287da07b08a664eb";
+    public static final String UPCOMING = "upcoming";
     public static final String POPULAR = "popular";
     public static final String NOW = "now";
     public Button button ;
@@ -59,6 +60,10 @@ public class FilmFragment extends Fragment {
         recyclerPopular = root.findViewById(R.id.recycler2);
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerPopular.setLayoutManager(horizontalLayoutManager2);
+//        recyclerupComming = root.findViewById(R.id.recycler3);
+    //    LinearLayoutManager horizontalLayoutManager3 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+//        recyclerupComming.setLayoutManager(horizontalLayoutManager2);
+
         loadData();
 
 
@@ -67,6 +72,7 @@ public class FilmFragment extends Fragment {
         }else {
             startRecyclerNowPlaying();
             startRecyclerPopular();
+          //  startRecyclerUpComing();
 
         }
 
@@ -89,6 +95,18 @@ public class FilmFragment extends Fragment {
                 Intent myIntent = new Intent(getActivity(), MovieToutAfficher.class);
                 Bundle b = new Bundle();
                 b.putString(POPULAR,POPULAR);
+                myIntent.putExtras(b);
+                startActivity(myIntent);
+
+            }
+        });
+
+        Button button3 = (Button) root.findViewById(R.id.button3);
+        button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getActivity(), MovieToutAfficher.class);
+                Bundle b = new Bundle();
+                b.putString(UPCOMING,UPCOMING);
                 myIntent.putExtras(b);
                 startActivity(myIntent);
 
@@ -163,6 +181,26 @@ public class FilmFragment extends Fragment {
                 Log.i("test2","nooopeeee");
             }
         });
+
+        tmdbService.getMoviesUpcoming(key).enqueue(new Callback<MovieCollection>() {
+            @Override
+            public void onResponse(Call<MovieCollection> call, Response<MovieCollection> response) {
+                //   Log.i("log4", "rattatata"  );
+                movieUpComing =response.body().getMovieList();
+                // Log.i("log45", "taille"+moviePopular.size()  );
+                //ajouterList(moviePopular);
+
+
+
+              //  startRecyclerUpComing();
+            }
+
+            @Override
+            public void onFailure(Call<modele.MovieCollection> call, Throwable t) {
+                Log.i("test2","nooopeeee");
+            }
+        });
+
 
 
     }

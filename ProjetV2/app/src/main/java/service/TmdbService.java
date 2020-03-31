@@ -16,6 +16,9 @@ public interface TmdbService {
     @GET("movie/popular")
     Call<MovieCollection> getMoviesPopular(@Query("api_key") String key);
 
+    @GET("movie/upcoming")
+    Call<MovieCollection> getMoviesUpcoming(@Query("api_key") String key);
+
     @GET("search/movie")
     Call<MovieCollection> getSearch(@Query("api_key") String key, @Query("query") String search);
 

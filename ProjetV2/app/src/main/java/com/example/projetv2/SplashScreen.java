@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SplashScreen extends AppCompatActivity {
 
     private Thread mSplashThread;
-    public static int SPLASH_TIME = 3000;
+    public static int SPLASH_TIME = 4000;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

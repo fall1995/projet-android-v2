@@ -12,12 +12,12 @@ import java.util.List;
 
 import modele.Cast;
 
-public class AdapterCast extends RecyclerView.Adapter<MyViewHolderCast>  {
+public class RecyclerCast extends RecyclerView.Adapter<MyViewHolderCast>  {
     private List<Cast> castList;
     private OnItemClickListener listener;
     private int n;
 
-    public AdapterCast(List<Cast> castList, OnItemClickListener listener, int n) {
+    public RecyclerCast(List<Cast> castList, OnItemClickListener listener, int n) {
         this.castList = castList;
         this.listener = listener;
         this.n = n;

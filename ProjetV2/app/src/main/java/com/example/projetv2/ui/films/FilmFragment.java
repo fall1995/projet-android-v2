@@ -60,9 +60,9 @@ public class FilmFragment extends Fragment {
         recyclerPopular = root.findViewById(R.id.recycler2);
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerPopular.setLayoutManager(horizontalLayoutManager2);
-//        recyclerupComming = root.findViewById(R.id.recycler3);
-    //    LinearLayoutManager horizontalLayoutManager3 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-//        recyclerupComming.setLayoutManager(horizontalLayoutManager2);
+       recyclerupComming = root.findViewById(R.id.recycler3);
+       LinearLayoutManager horizontalLayoutManager3 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+      recyclerupComming.setLayoutManager(horizontalLayoutManager3);
 
         loadData();
 
@@ -72,7 +72,7 @@ public class FilmFragment extends Fragment {
         }else {
             startRecyclerNowPlaying();
             startRecyclerPopular();
-          //  startRecyclerUpComing();
+           startRecyclerUpComing();
 
         }
 
@@ -192,7 +192,7 @@ public class FilmFragment extends Fragment {
 
 
 
-              //  startRecyclerUpComing();
+                startRecyclerUpComing();
             }
 
             @Override
@@ -264,6 +264,33 @@ public class FilmFragment extends Fragment {
         });
     }
 
+
+    private void startRecyclerUpComing(){
+        final RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(movieUpComing, new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                // Toast.makeText(getActivity()," en position " + position, Toast.LENGTH_LONG).show();
+                Intent movieClickActivity = new Intent(getActivity(), MovieDetails.class);
+
+                Bundle b = new Bundle();
+                Movie movie = (Movie) moviePopular.get(position);
+                String nomSelect = movie.getTitle();
+                b.putString(UPCOMING, UPCOMING);
+                b.putInt("pos",position);
+                movieClickActivity.putExtras(b); //Put your id to your next Intent
+                startActivity(movieClickActivity);
+                //finish();
+            }
+        },300);
+        recyclerupComming.setAdapter(recyclerViewAdapter);
+
+        recyclerupComming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Log.i("click","je viens de cliquer sur ..");
+            }
+        });
+    }
     private void  loadData(){
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
         Gson gson = new Gson();

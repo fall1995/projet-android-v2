@@ -128,6 +128,7 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
         Log.i("add", "tailleListe " + FilmFragment.listFavoris.size());
         FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
         FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
+        FilmFragment.recyclerupComming.getAdapter().notifyDataSetChanged();
         saveData();
     }
 
@@ -142,41 +143,47 @@ public class MyViewHolderMovie extends RecyclerView.ViewHolder implements View.O
             }
         }
 
-            if (FavorisFragment.recyclerFavoris != null) {
-                FavorisFragment.recyclerFavoris.getAdapter().notifyDataSetChanged();
+        if (FavorisFragment.recyclerFavoris != null) {
+            FavorisFragment.recyclerFavoris.getAdapter().notifyDataSetChanged();
 
-            }
-            Log.i("test43", "test =" + n);
-            if (n == 100) {
-                FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
+        }
+        Log.i("test43", "test =" + n);
+        if (n == 100) {
+            FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
+            FilmFragment.recyclerupComming.getAdapter().notifyDataSetChanged();
+        }
+        if (n == 200) {
+            FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
+            FilmFragment.recyclerupComming.getAdapter().notifyDataSetChanged();
 
-            }
-            if (n == 200) {
-                FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
-            }
+        }
+        if (n == 300) {
+            FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
+            FilmFragment.recyclerPopular.getAdapter().notifyDataSetChanged();
+        }
 
 
-
-saveData();
+        saveData();
     }
 
-    private void saveData(){
+    private void saveData() {
         SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(FilmFragment.listFavoris);
-        editor.putString("task list",json);
+        editor.putString("task list", json);
         editor.apply();
 
     }
 
-    private void  loadData(){
+    private void loadData() {
         SharedPreferences sharedPreferences = itemView.getContext().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = sharedPreferences.getString("task list",null);
-        Type type = new TypeToken< ArrayList<Movie>>() {} .getType();
-        FilmFragment.listFavoris = gson.fromJson(json,type);
-        if (FilmFragment.listFavoris == null){
+        String json = sharedPreferences.getString("task list", null);
+        Type type = new TypeToken<ArrayList<Movie>>() {
+        }.getType();
+        FilmFragment.listFavoris = gson.fromJson(json, type);
+        if (FilmFragment.listFavoris == null) {
             FilmFragment.listFavoris = new ArrayList<>();
         }
 

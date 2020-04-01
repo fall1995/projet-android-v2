@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,9 +30,11 @@ import com.like.OnLikeListener;
 
 import java.util.List;
 
+import modele.Actor;
 import modele.Cast;
 import modele.CastingCollection;
 import modele.Movie;
+import modele.MovieSimilarCollection;
 import modele.Video;
 import modele.VideosCollection;
 import retrofit2.Call;
@@ -46,34 +47,45 @@ public class MovieDetails extends YouTubeBaseActivity
         implements YouTubePlayer.OnInitializedListener {
     private final String APIYoutube = "AIzaSyBbf-y_8UUB7AYcqkvHSbE_fJ7GVdIzcxw";
     public static final String key = "1abe855bc465dce9287da07b08a664eb";
-
+    private final String SIMILAR = "similar";
+    public static final String ACTOR = "actor";
 
     private YouTubePlayerView youTubePlayerView;
     private YouTubePlayer youTubePlayer;
     private Movie selectedMovie;
     private TextView movieTitle;
     private TextView sortie;
-    private List<Cast> castinglist;
+    public static List<Cast> castinglist;
+    private static List<Movie> similarList;
     private TextView movieOverview;
     private RatingBar ratingBar;
     private int pos;
     private LikeButton button;
     private ImageView imageView;
     private  RecyclerView recyclerCast;
+    private  RecyclerView recyclerSimilar;
+    private Movie stockedMovie;
     String listPopular="";
     String listFavoris="";
     String listNow="";
+    String listUpComming="";
     String listsearch="";
+    String listSimilar="";
+    String listMoviesActor="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.onResume();
         setContentView(R.layout.activity_movie_detail);
         recyclerCast = findViewById(R.id.cast);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerCast.setLayoutManager(horizontalLayoutManager);
         button = (LikeButton) findViewById(R.id.spark_button2);
+        recyclerSimilar = findViewById(R.id.similar);
+        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerSimilar.setLayoutManager(horizontalLayoutManager2);
+
 
         button.setOnLikeListener(new OnLikeListener() {
             @Override
@@ -86,6 +98,11 @@ public class MovieDetails extends YouTubeBaseActivity
                 supFavoris(likeButton.getRootView());
             }
         });
+
+        if (recyclerSimilar!=null){
+
+        }
+
         uploadFeature();
         youTubePlayerView = findViewById(R.id.youtubeplayerview);
         youTubePlayerView.initialize(APIYoutube, this);
@@ -96,33 +113,56 @@ public class MovieDetails extends YouTubeBaseActivity
 
     private void uploadFeature() {
         Bundle b = getIntent().getExtras();
-        int value = -1; // or
-        // other values
-
 
         if(b != null){
             listPopular= b.getString(FilmFragment.POPULAR);
             listNow= b.getString(FilmFragment.NOW);
             listsearch= b.getString(RechercheFragment.SEARCH);
             listFavoris= b.getString(FavorisFragment.FAVORIS);
+            listUpComming=  b.getString(FilmFragment.UPCOMING);
+            listSimilar=  b.getString(SIMILAR);
+            listMoviesActor= b.getString(ActorDetails.MACTOR);
+
 
             pos = b.getInt("pos");
           // Log.i("heazazaazzayyyy", listPopular);
         }
         if (listPopular!=null && listPopular.equals(FilmFragment.POPULAR) ) {
             selectedMovie = FilmFragment.moviePopular.get(pos);
+            stockedMovie = selectedMovie;
          //   Log.i("skulurt", selectedMovie.getTitle());
         }else if ( listNow!=null && listNow.equals(FilmFragment.NOW) ) {
             selectedMovie = FilmFragment.movieNowPlaying.get(pos);
-          //   Log.i("skulurt", selectedMovie.getTitle());
+            stockedMovie = selectedMovie;
+
+            //   Log.i("skulurt", selectedMovie.getTitle());
         }else if (listsearch!=null && listsearch.equals(RechercheFragment.SEARCH)  ) {
             selectedMovie = RechercheFragment.listMovie.get(pos);
+            stockedMovie = selectedMovie;
+
             // Log.i("skulurt", selectedMovie.getTitle());
         }else if (listFavoris!=null && listFavoris.equals(FavorisFragment.FAVORIS)  ) {
             selectedMovie = FavorisFragment.listFavoris.get(pos);
-          //  Log.i("skulurt", selectedMovie.getTitle());
-        }
+            stockedMovie = selectedMovie;
 
+            //  Log.i("skulurt", selectedMovie.getTitle());
+        }else if (listUpComming!=null && listUpComming.equals(FilmFragment.UPCOMING)  ) {
+            selectedMovie = FilmFragment.movieUpComing.get(pos);
+            stockedMovie = selectedMovie;
+
+        }else if (listSimilar!=null && listSimilar.equals(SIMILAR)  ) {
+            Log.i("neein","neeein");
+
+            selectedMovie = similarList.get(pos);
+            stockedMovie = selectedMovie;
+
+        }else if (listMoviesActor!=null && listMoviesActor.equals(ActorDetails.MACTOR)  ) {
+            Log.i("neein","neeein");
+
+            selectedMovie = ActorDetails.movieActor.get(pos);
+            stockedMovie = selectedMovie;
+
+        }
 
         setDetails();
 
@@ -175,6 +215,23 @@ public class MovieDetails extends YouTubeBaseActivity
             @Override
             public void onFailure(Call<CastingCollection> call, Throwable t) {
                 Log.i("neein","neeein");
+            }
+
+        });
+
+        tmdbService.getMoviesSimilar(selectedMovie.getId(),key).enqueue(new Callback<MovieSimilarCollection>() {
+            @Override
+            public void onResponse(Call<MovieSimilarCollection> call, Response<MovieSimilarCollection> response) {
+
+                similarList =response.body().getResults();
+                //   Log.i("ofcurse","actor " + castinglist.get(0).getName() );
+                startRecyclerSimilar();
+
+            }
+
+            @Override
+            public void onFailure(Call<MovieSimilarCollection> call, Throwable t) {
+
             }
 
         });
@@ -233,26 +290,53 @@ public class MovieDetails extends YouTubeBaseActivity
 
 
     private void startRecyclerCast(){
-        Log.i("castrecyler","castore");
-        final AdapterCast recyclerViewAdapter = new AdapterCast(castinglist, new AdapterCast.OnItemClickListener() {
+
+        final RecyclerCast recyclerViewAdapter = new RecyclerCast(castinglist, new RecyclerCast.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
                 //Toast.makeText(getApplicationContext()," en position " + position, Toast.LENGTH_LONG).show();
-               /* Intent movieClickActivity = new Intent(getApplicationContext(), MovieDetails.class);
+               Intent movieClickActivity = new Intent(getApplicationContext(), ActorDetails.class);
 
                 Bundle b = new Bundle();
-                Movie movie = (Movie) moviePopular.get(position);
-                String nomSelect = movie.getTitle();
-                b.putString(POPULAR, POPULAR);
+             //   Movie movie = (Movie) moviePopular.get(position);
+                String nomSelect = castinglist.get(pos).getName();
+                b.putString(ACTOR, ACTOR);
                 b.putInt("pos",position);
                 movieClickActivity.putExtras(b); //Put your id to your next Intent
-                startActivity(movieClickActivity);*/
+                startActivity(movieClickActivity);
                 //finish();
             }
         },3);
         recyclerCast.setAdapter(recyclerViewAdapter);
 
         recyclerCast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("click","je viens de cliquer sur ..");
+            }
+        });
+    }
+
+    private void startRecyclerSimilar(){
+        Log.i("castrecyler","castore");
+        final RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(similarList, new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent movieClickActivity = new Intent(getApplicationContext(), MovieDetails.class);
+
+                Bundle b = new Bundle();
+                Movie movie = (Movie) similarList.get(position);
+                String nomSelect = movie.getTitle();
+                b.putString(SIMILAR, SIMILAR);
+                b.putInt("pos",position);
+                movieClickActivity.putExtras(b); //Put your id to your next Intent
+                startActivity(movieClickActivity);
+            }
+        },3);
+        recyclerSimilar.setAdapter(recyclerViewAdapter);
+
+        recyclerSimilar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("click","je viens de cliquer sur ..");
@@ -280,7 +364,21 @@ public class MovieDetails extends YouTubeBaseActivity
             FilmFragment.listFavoris.add(FilmFragment.movieNowPlaying.get(pos));
 
             //   Log.i("skulurt", selectedMovie.getTitle());
+        }else if (listsearch!=null && listsearch.equals(RechercheFragment.SEARCH)  ) {
+            FilmFragment.listFavoris.add(RechercheFragment.listMovie.get(pos));
+            // Log.i("skulurt", selectedMovie.getTitle());
+        }else if ( listSimilar!=null && listSimilar.equals(FilmFragment.NOW) ) {
+            similarList.add(similarList.get(pos));
+
+            //   Log.i("skulurt", selectedMovie.getTitle());
+        }else if ( listMoviesActor!=null && listMoviesActor.equals(FilmFragment.NOW) ) {
+            similarList.add(ActorDetails.movieActor.get(pos));
+
+            //   Log.i("skulurt", selectedMovie.getTitle());
         }
+
+
+
 
        // Log.i("add", "tailleListe " + FilmFragment.listFavoris.size());
         FilmFragment.recyclerNowPlaying.getAdapter().notifyDataSetChanged();
@@ -316,5 +414,17 @@ public class MovieDetails extends YouTubeBaseActivity
 
         }
         saveData();
+    }
+
+    @Override
+    public void onResume()
+    {  // After a pause OR at startup
+        super.onResume();
+        if (stockedMovie!=null){
+            selectedMovie=stockedMovie;
+            getDetails();
+
+        }
+        //Refresh your stuff here
     }
 }

@@ -29,89 +29,51 @@
 
 
                 <ImageView
-                    android:id="@+id/image_details"
+                    android:id="@+id/image_actor"
                     android:layout_width="100dp"
                     android:layout_height="160dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:scaleType="fitXY" />
 
-                <com.like.LikeButton
-                    android:id="@+id/spark_button2"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    app:like_drawable="@drawable/ic_star_on"
-                    app:unlike_drawable="@drawable/ic_star_off"
-                    app:icon_size="15dp"
-                    app:anim_scale_factor="2"
-                    android:layout_toRightOf="@id/sortie"
-                    android:layout_marginLeft="100dp"
-
-                    />
-
                 <TextView
-                    android:id="@+id/titre"
+                    android:id="@+id/nom_acteur"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@id/image_details"
+                    android:layout_toRightOf="@id/image_actor"
                     android:textColor="@color/white"
                     android:textSize="25dp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/de"
+                    android:id="@+id/date_naissance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="47dp"
-                    android:layout_toRightOf="@id/image_details"
-                    android:hint="sortie :"
+                    android:layout_toRightOf="@id/image_actor"
+                    android:hint="Date de Naissance :"
 
                     android:textColorHint="@color/white" />
 
                 <TextView
-                    android:id="@+id/sortie"
+                    android:id="@+id/birth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:layout_marginTop="47dp"
-                    android:layout_toRightOf="@id/de"
+                    android:layout_toRightOf="@id/date_naissance"
                     android:hint="XXXXXX "
                     android:textColor="@color/white"
                     android:textStyle="bold" />
-
-                <RatingBar
-                    android:id="@+id/movie_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/sortie"
-                    android:layout_marginLeft="125dp"
-                    android:layout_marginTop="13dp"
-                    android:layout_marginRight="7dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/etoiles_arriere_plan"
-                    android:isIndicator="true"
-                    android:max="5"
-                    android:scaleX=".5"
-                    android:scaleY=".5"
-                    android:transformPivotX="0dp"
-                    android:transformPivotY="0dp" />
-
                 <View
                     android:id="@+id/separator"
                     android:layout_width="match_parent"
-                    android:layout_below="@id/image_details"
-                    android:layout_height="4dp"
+                    android:layout_below="@id/image_actor"
+                    android:layout_height="10dp"
                     android:background="@color/colorPrimaryDark" />
-                <com.google.android.youtube.player.YouTubePlayerView
-
-                    android:id="@+id/youtubeplayerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/separator"
-                    />
 
             </RelativeLayout>
 
@@ -120,7 +82,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/titre_overview"
+                    android:id="@+id/resume"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="Synopsis"
@@ -129,9 +91,9 @@
                     android:textSize="20dp" />
 
                 <TextView
-                    android:id="@+id/overview"
+                    android:id="@+id/bio"
                     android:layout_width="wrap_content"
-                    android:layout_below="@id/titre_overview"
+                    android:layout_below="@id/resume"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="10dp"
@@ -154,37 +116,22 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Acteurs"
+                        android:hint="Filmographie"
+                        android:layout_marginTop="5dp"
                         android:textSize="25dp"
+                        android:id="@+id/golf7"
                         android:textStyle="bold"
-                        android:textColorHint="@color/dark"
-                        />
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/cast"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="30dp"
-
-                    />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="FILMS SIMILAIRES"
-                        android:textSize="25dp"
-                        android:id="@+id/titre_similaires"
-                        android:textStyle="bold"
-                        android:layout_below="@id/cast"
                         android:textColorHint="@color/dark"
                         />
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/similar"
-                        android:layout_below="@id/titre_similaires"
+                        android:id="@+id/golf8"
+                        android:layout_below="@id/golf7"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="30dp"
 
                         />
+
                 </RelativeLayout>
 
         </LinearLayout>

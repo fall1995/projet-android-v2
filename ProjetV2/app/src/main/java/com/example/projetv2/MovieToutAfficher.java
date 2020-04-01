@@ -27,6 +27,7 @@ public class MovieToutAfficher extends AppCompatActivity {
     private String listFavoris="";
     private String listNow="";
     private String listsearch="";
+    private String listUpComing="";
 
 
     @Override
@@ -40,6 +41,7 @@ public class MovieToutAfficher extends AppCompatActivity {
         uploadFeature();
 
 
+
     }
 
     private void uploadFeature() {
@@ -51,6 +53,7 @@ public class MovieToutAfficher extends AppCompatActivity {
             listNow= b.getString(FilmFragment.NOW);
             listsearch= b.getString(RechercheFragment.SEARCH);
             listFavoris= b.getString(FavorisFragment.FAVORIS);
+            listUpComing= b.getString(FilmFragment.UPCOMING);
 
 
 
@@ -64,8 +67,8 @@ startRecyclerPopular();
         }else if (listsearch!=null && listsearch.equals(RechercheFragment.SEARCH)  ) {
 
             // Log.i("skulurt", selectedMovie.getTitle());
-        }else if (listFavoris!=null && listFavoris.equals(FavorisFragment.FAVORIS)  ) {
-
+        }else if (listUpComing!=null && listUpComing.equals(FilmFragment.UPCOMING)  ) {
+                startRecyclerUpComing();
 
         }
 
@@ -137,5 +140,36 @@ startRecyclerPopular();
         });
 
     }
+
+    public void startRecyclerUpComing(){
+
+        recyclerViewAdapter = new RecyclerViewAdapter(FilmFragment.movieUpComing, new RecyclerViewAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View view, int position) {
+
+                //   Toast.makeText(MovieToutAfficher.this,"movie selectionnée en position " + position, Toast.LENGTH_LONG).show();
+                Intent movieClickActivity = new Intent(MovieToutAfficher.this, MovieDetails.class);
+                Bundle b = new Bundle();
+                Movie movie = (Movie) FilmFragment.movieUpComing.get(position);
+                String nomSelect = movie.getTitle();
+                b.putString(FilmFragment.NOW, FilmFragment.NOW);
+                b.putInt("pos",position);
+                movieClickActivity.putExtras(b); //Put your id to your next Intent
+                startActivity(movieClickActivity);
+
+            }
+        },2);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("click","je viens de cliquer sur ..");
+            }
+        });
+
+    }
+
 
 }

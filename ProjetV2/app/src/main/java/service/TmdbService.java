@@ -1,5 +1,9 @@
 package service;
 
+import modele.Actor;
+import modele.MovieActorCollection;
+import modele.MovieSimilarCollection;
+
 import modele.CastingCollection;
 import modele.MovieCollection;
 import modele.VideosCollection;
@@ -16,6 +20,9 @@ public interface TmdbService {
     @GET("movie/popular")
     Call<MovieCollection> getMoviesPopular(@Query("api_key") String key);
 
+   @GET("movie/{movie_id}/similar")
+    Call<MovieSimilarCollection> getMoviesSimilar(@Path("movie_id") int movie_id,@Query("api_key") String key);
+
     @GET("movie/upcoming")
     Call<MovieCollection> getMoviesUpcoming(@Query("api_key") String key);
 
@@ -24,6 +31,13 @@ public interface TmdbService {
 
     @GET( "movie/{movie_id}/videos")
     Call<VideosCollection> getMovieVideos(@Path("movie_id") int movie_id, @Query ("api_key") String key);
+
+    @GET( "person/{person_id}")
+    Call<Actor> getActorDetails(@Path("person_id") int person_id, @Query ("api_key") String key);
+
+    @GET( "person/{person_id}/movie_credits")
+    Call<MovieActorCollection> getActorMovie(@Path("person_id") int person_id, @Query ("api_key") String key);
+
 
     @GET( "movie/{movie_id}/credits")
     Call<CastingCollection> getMovieDetails(@Path("movie_id") int movie_id, @Query ("api_key") String key);

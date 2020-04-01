@@ -218,4 +218,6 @@ public class RechercheFragment extends Fragment {
             }
         }
     }
+    
+
 }
